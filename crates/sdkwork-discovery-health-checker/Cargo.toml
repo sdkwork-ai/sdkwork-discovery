@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-health-checker"
 edition.workspace = true
 version.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 sdkwork-discovery-contract.workspace = true
 reqwest.workspace = true

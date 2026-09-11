@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-api-discovery-standalone-gateway"
 version.workspace = true
 edition.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 sdkwork-api-discovery-assembly.workspace = true
 sdkwork-web-bootstrap.workspace = true

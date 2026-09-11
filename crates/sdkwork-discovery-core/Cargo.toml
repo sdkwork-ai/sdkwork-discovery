@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-core"
 edition.workspace = true
 version.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 serde_json.workspace = true
 sdkwork-discovery-contract.workspace = true

@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-rpc"
 edition.workspace = true
 version.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 sdkwork-discovery-contract.workspace = true
 sdkwork-discovery-core.workspace = true

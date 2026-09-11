@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-contract"
 edition.workspace = true
 version.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 async-trait.workspace = true
 sdkwork-utils-rust.workspace = true

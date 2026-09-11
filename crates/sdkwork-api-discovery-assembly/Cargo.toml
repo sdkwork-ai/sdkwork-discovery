@@ -1,9 +1,13 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-api-discovery-assembly"
 edition.workspace = true
 version.workspace = true
 description = "Generated API assembly for sdkwork-discovery application HTTP plane."
 
+
+[lints]
+workspace = true
 [lib]
 name = "sdkwork_api_discovery_assembly"
 path = "src/lib.rs"

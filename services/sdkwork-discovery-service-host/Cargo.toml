@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-service-host"
 edition.workspace = true
 version.workspace = true
 
+
+[lints]
+workspace = true
 [dependencies]
 sdkwork-discovery-contract.workspace = true
 sdkwork-discovery-config.workspace = true

@@ -1,8 +1,12 @@
 [package]
+rust-version.workspace = true
 name = "sdkwork-discovery-standards"
 edition.workspace = true
 version.workspace = true
 publish = false
 
+
+[lints]
+workspace = true
 [dependencies]
 toml.workspace = true
