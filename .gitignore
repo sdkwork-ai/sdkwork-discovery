@@ -58,4 +58,3 @@ Thumbs.db
 sdks/**/package-lock.json
 
 # Build artifacts
-/bin/
