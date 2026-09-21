@@ -738,20 +738,23 @@ fn parse_host_port_bind(key: &str, bind: &str) -> DiscoveryResult<(String, u16)>
         )));
     }
 
-    let separator = normalized.rfind(':').ok_or_else(|| {
+    // The split is done once, by the shared parser, so this listener cannot
+    // drift from the others in the workspace. Only the diagnostics are local;
+    // an empty host or a missing port is reported as the same `host:port`
+    // contract violation the operator sees today.
+    let invalid = || {
         DiscoveryError::InvalidConfig(format!(
             "invalid bind address for {key}: expected host:port"
         ))
-    })?;
-    if separator == 0 {
-        return Err(DiscoveryError::InvalidConfig(format!(
-            "invalid bind address for {key}: expected host:port"
-        )));
-    }
+    };
+    let port = sdkwork_utils_rust::service_base_url::bind_port(normalized).ok_or_else(invalid)?;
+    let host = normalized
+        .rsplit_once(':')
+        .map(|(host, _)| host)
+        .filter(|host| !host.is_empty())
+        .ok_or_else(invalid)?;
 
-    let host = normalized[..separator].to_string();
-    let port = parse_u16_env(key, &normalized[separator + 1..])?;
-    Ok((host, port))
+    Ok((host.to_owned(), port))
 }
 
 fn parse_bool_env(key: &str, value: &str) -> DiscoveryResult<bool> {

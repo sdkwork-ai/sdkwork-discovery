@@ -2343,6 +2343,7 @@ name = "sdkwork-discovery-config"
 version = "0.1.0"
 dependencies = [
  "sdkwork-discovery-contract",
+ "sdkwork-utils-rust",
  "serde",
  "thiserror 2.0.18",
  "toml 0.8.23",
