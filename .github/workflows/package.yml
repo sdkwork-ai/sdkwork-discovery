@@ -74,7 +74,7 @@ jobs:
   package:
     uses: sdkwork-ai/sdkwork-github-workflow/.github/workflows/sdkwork-package.yml@v1
     with:
-      config_path: sdkwork.workflow.json
+      config_path: agent.workflow.json
       tag: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref_name }}
       package_version: ${{ github.event.inputs.package_version || github.event.release.tag_name || github.ref_name }}
       platform: ${{ github.event.inputs.platform || 'all' }}

@@ -114,7 +114,7 @@ fn durable_storage_crates_integrate_sdkwork_database() {
     assert!(redis_manifest.contains("redis"));
     assert!(redis_manifest.contains("sdkwork-discovery-storage-memory"));
 
-    assert!(workspace_root.join("sdkwork.workflow.json").exists());
+    assert!(workspace_root.join("agent.workflow.json").exists());
     assert!(workspace_root
         .join(".github/workflows/package.yml")
         .exists());

@@ -5,7 +5,7 @@ Application: sdkwork-discovery
 Version: 0.1.0
 Runtime target: server
 Deployment profile: cloud (server tar.gz)
-Package id: linux-x64-cloud-server-tar-gz (primary); platform-specific tar.gz via `sdkwork.workflow.json`
+Package id: linux-x64-cloud-server-tar-gz (primary); platform-specific tar.gz via `agent.workflow.json`
 Specs: RELEASE_SPEC.md, APP_MANIFEST_SPEC.md, DISCOVERY_SPEC.md
 
 ## Summary
@@ -70,7 +70,7 @@ CI: `.github/workflows/verify.yml` (verify + package-smoke on ubuntu-24.04)
 
 ## Supply Chain
 
-- Signing: not required (`sdkwork.workflow.json` → `signingRequired: false`)
+- Signing: not required (`agent.workflow.json` → `signingRequired: false`)
 - SBOM: not required (`sbomRequired: false`); placeholders documented in workflow lifecycle
 - Artifact attestations: enabled in workflow security block
 

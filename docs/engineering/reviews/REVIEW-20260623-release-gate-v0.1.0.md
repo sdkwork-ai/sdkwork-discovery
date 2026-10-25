@@ -16,7 +16,7 @@ Production release candidate for `sdkwork-discovery` server delivery: Service Re
 
 | Requirement | Evidence |
 | --- | --- |
-| Manifest validation | `agent.app.config.json`, `sdkwork.workflow.json`, `specs/component.spec.json` |
+| Manifest validation | `agent.app.config.json`, `agent.workflow.json`, `specs/component.spec.json` |
 | Deployment profile / runtime target | `cloud` profile; runtime `SERVER` in app manifest |
 | Version and changelog | `Cargo.toml` workspace `0.1.0`, [CHANGELOG.md](../../changelogs/CHANGELOG.md), [RELEASE-v0.1.0.md](../../releases/RELEASE-v0.1.0.md) |
 | Build verification | `pnpm run verify` (fmt, clippy, workspace tests, topology, proto, package contract, docs) |
@@ -50,10 +50,10 @@ Per `SUPPLY_CHAIN_SECURITY_SPEC.md` §7, this release registers a formal SBOM ge
 | Field | Value |
 | --- | --- |
 | Owner | SDKWork discovery workstream |
-| Reason | Server tar.gz release (`linux-x64-cloud-server-tar-gz`) has not yet integrated an SBOM generation toolchain (e.g., `cargo cyclonedx` or Syft) into the CI lifecycle. The `sbom` lifecycle step in `sdkwork.workflow.json` is a placeholder log. |
+| Reason | Server tar.gz release (`linux-x64-cloud-server-tar-gz`) has not yet integrated an SBOM generation toolchain (e.g., `cargo cyclonedx` or Syft) into the CI lifecycle. The `sbom` lifecycle step in `agent.workflow.json` is a placeholder log. |
 | Risk | Consumers cannot independently verify the full transitive dependency closure of the server binary from a machine-readable SBOM artifact. Manual dependency audit remains possible via `Cargo.lock` and `Cargo.toml`. |
 | Expiry | 2026-09-30 |
-| Compensating control | Release archives ship `checksums.sha256` (SHA-256 digests for every archived file) and GitHub artifact attestations are enabled in `sdkwork.workflow.json` (`security.artifactAttestations: true`). `Cargo.lock` is checked in for reproducible builds. |
+| Compensating control | Release archives ship `checksums.sha256` (SHA-256 digests for every archived file) and GitHub artifact attestations are enabled in `agent.workflow.json` (`security.artifactAttestations: true`). `Cargo.lock` is checked in for reproducible builds. |
 
 ## Verification Commands (Recorded Outcomes)
 

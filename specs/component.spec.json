@@ -293,12 +293,12 @@
       "description": "PostgreSQL and SQLite durable storage now bootstrap pools through sdkwork-database-config and sdkwork-database-sqlx"
     },
     {
-      "issue": "Missing sdkwork.workflow.json and GitHub packaging workflow per GITHUB_WORKFLOW_SPEC.md",
-      "target": "sdkwork.workflow.json",
+      "issue": "Missing agent.workflow.json and GitHub packaging workflow per GITHUB_WORKFLOW_SPEC.md",
+      "target": "agent.workflow.json",
       "status": "completed",
       "completedAt": "2026-06-18",
       "breaking": false,
-      "description": "Added sdkwork.workflow.json, .github/workflows/package.yml, and scripts/package-server.mjs"
+      "description": "Added agent.workflow.json, .github/workflows/package.yml, and scripts/package-server.mjs"
     },
     {
       "issue": "Crypto and content hashing duplicated local helpers instead of sdkwork-utils-rust",

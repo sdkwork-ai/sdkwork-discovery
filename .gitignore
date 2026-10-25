@@ -61,3 +61,17 @@ sdks/**/package-lock.json
 # --- SDKWork: gitignore completeness (2026-10-16) ---
 # Added by repo-commit task; targeted rules only, compliant with check-gitignore-standard
 __pycache__/
+
+# ---- auto-audited: local artifacts that must never be committed ----
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+tmp/
+temp/
+*.tmp
+*.temp
+.cache/
+.turbo/
+.next/
