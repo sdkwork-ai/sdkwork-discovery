@@ -3,7 +3,7 @@
 Environments: `development|test|staging|demo|production`. Commands run on the
 local WSL host by default; append `--host ssh://[user@]host[:port]` for remote
 targets. Image reference: `registry.sdkwork.com/apps/sdkwork-discovery-standalone:0.1.0`
-(tag from `sdkwork.app.config.json` → `release.currentVersion`).
+(tag from `agent.app.config.json` → `release.currentVersion`).
 
 > ℹ️ **Delivery posture**: standalone delivery is a host package (`host-package/nginx`); cloud delivery is a container image (`container-image/kubernetes`).
 > The bundle container-install path described in sections 1 (install) / 2 (upgrade) (`deployments/docker/bundle/`) applies only when the module

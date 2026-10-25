@@ -22,7 +22,7 @@ First production-oriented release of the SDKWork Discovery control plane: gRPC s
 | Install manifest | `install-manifest.json` |
 | Checksums | `checksums.sha256` |
 
-Container image reference (manifest): `registry.sdkwork.com/apps/sdkwork-discovery` (`sdkwork.app.config.json`)
+Container image reference (manifest): `registry.sdkwork.com/apps/sdkwork-discovery` (`agent.app.config.json`)
 
 ## Compatibility
 

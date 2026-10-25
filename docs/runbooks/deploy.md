@@ -1,6 +1,6 @@
 # Runbook — sdkwork-discovery 部署 / 升级 / 回滚（中文）
 
-适用环境：`development|test|staging|demo|production`。所有命令默认在本机 WSL 执行，远程主机加 `--host ssh://[user@]host[:port]`。镜像参考：`registry.sdkwork.com/apps/sdkwork-discovery-standalone:0.1.0`（tag 取自 `sdkwork.app.config.json` → `release.currentVersion`）。
+适用环境：`development|test|staging|demo|production`。所有命令默认在本机 WSL 执行，远程主机加 `--host ssh://[user@]host[:port]`。镜像参考：`registry.sdkwork.com/apps/sdkwork-discovery-standalone:0.1.0`（tag 取自 `agent.app.config.json` → `release.currentVersion`）。
 
 > ℹ️ **交付姿态**：本模块 standalone 交付为宿主包（`host-package/nginx`），cloud 交付为容器镜像（`container-image/kubernetes`）。
 > 本文档 §1 安装 / §2 升级描述的 bundle 容器安装路径（`deployments/docker/bundle/`）仅在该模块启用 standalone **容器**安装时适用；

@@ -6,7 +6,7 @@
     "name": "SDKWork Discovery",
     "repository": "sdkwork-ai/sdkwork-discovery",
     "sourcePath": ".",
-    "configPath": "sdkwork.app.config.json"
+    "configPath": "agent.app.config.json"
   },
   "release": {
     "artifactPrefix": "sdkwork-discovery",

@@ -20,7 +20,7 @@ Do not copy root standard text into this repository. If these relative paths do 
 
 ## Application Identity
 
-Read the root `sdkwork.app.config.json` before changing application behavior, runtime config, SDK wiring, release metadata, or app-owned capabilities.
+Read the root `agent.app.config.json` before changing application behavior, runtime config, SDK wiring, release metadata, or app-owned capabilities.
 
 ## Local Dictionary Structure
 
@@ -28,7 +28,7 @@ Read the root `sdkwork.app.config.json` before changing application behavior, ru
 - `CLAUDE.md`: Claude Code compatibility shim that points to `AGENTS.md`.
 - `GEMINI.md`: Gemini CLI compatibility shim that points to `AGENTS.md`.
 - `CODEX.md`: Codex compatibility shim that points to `AGENTS.md`.
-- `sdkwork.app.config.json`: application identity and release metadata.
+- `agent.app.config.json`: application identity and release metadata.
 - `.sdkwork/`: reserved local dictionary folder for local skills, plugins, manifests, or AI workspace metadata.
 - `specs/`: local application/component contracts and narrowing rules.
 - `proto/`: source-of-truth RPC protobuf contracts.
@@ -44,7 +44,7 @@ Read the root `sdkwork.app.config.json` before changing application behavior, ru
 ## Spec Resolution Order
 
 1. Read this `AGENTS.md` and any nearer component-level `AGENTS.md`.
-2. Read `sdkwork.app.config.json` when changing app behavior, runtime config, SDK wiring, release metadata, or app-owned capabilities.
+2. Read `agent.app.config.json` when changing app behavior, runtime config, SDK wiring, release metadata, or app-owned capabilities.
 3. Read local `specs/README.md` and `specs/component.spec.json` when changing public exports, runtime entrypoints, SDK clients, generated artifacts, config keys, or verification commands.
 4. Read local `.sdkwork/README.md`, `.sdkwork/skills/`, and `.sdkwork/plugins/` when relevant.
 5. Read `../sdkwork-specs/README.md` and the task-specific root specs.

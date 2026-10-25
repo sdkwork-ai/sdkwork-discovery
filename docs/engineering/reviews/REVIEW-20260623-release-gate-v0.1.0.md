@@ -16,7 +16,7 @@ Production release candidate for `sdkwork-discovery` server delivery: Service Re
 
 | Requirement | Evidence |
 | --- | --- |
-| Manifest validation | `sdkwork.app.config.json`, `sdkwork.workflow.json`, `specs/component.spec.json` |
+| Manifest validation | `agent.app.config.json`, `sdkwork.workflow.json`, `specs/component.spec.json` |
 | Deployment profile / runtime target | `cloud` profile; runtime `SERVER` in app manifest |
 | Version and changelog | `Cargo.toml` workspace `0.1.0`, [CHANGELOG.md](../../changelogs/CHANGELOG.md), [RELEASE-v0.1.0.md](../../releases/RELEASE-v0.1.0.md) |
 | Build verification | `pnpm run verify` (fmt, clippy, workspace tests, topology, proto, package contract, docs) |
@@ -66,7 +66,7 @@ node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .  # pa
 
 ## Approval
 
-Release gate satisfied for **server runtime target** artifacts at version **0.1.0**. Operator approval required before changing `sdkwork.app.config.json` publish status from `DRAFT`.
+Release gate satisfied for **server runtime target** artifacts at version **0.1.0**. Operator approval required before changing `agent.app.config.json` publish status from `DRAFT`.
 
 ## Linked Evidence
 

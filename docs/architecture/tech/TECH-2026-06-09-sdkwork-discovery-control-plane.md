@@ -23,7 +23,7 @@
 - Create: `.sdkwork/plugins/README.md`
 - Create: `specs/README.md`
 - Create: `specs/component.spec.json`
-- Create: `sdkwork.app.config.json`
+- Create: `agent.app.config.json`
 - Create: `README.md`
 
 - [x] Write repository metadata and local component specs.

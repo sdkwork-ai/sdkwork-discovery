@@ -241,7 +241,7 @@ async function packageServer(context) {
   await copyRunbooks(context.stageRoot);
   await copyReleaseEvidence(context.stageRoot, context.version);
   await copyIfExists('README.md', path.join(context.stageRoot, 'README.md'));
-  await copyIfExists('sdkwork.app.config.json', path.join(context.stageRoot, 'sdkwork.app.config.json'));
+  await copyIfExists('agent.app.config.json', path.join(context.stageRoot, 'agent.app.config.json'));
   await copyIfExists(path.join('specs', 'component.spec.json'), path.join(context.stageRoot, 'specs', 'component.spec.json'));
   await writeFile(path.join(context.stageRoot, 'INSTALL.md'), renderInstallGuide(context), 'utf8');
   await writeFile(
