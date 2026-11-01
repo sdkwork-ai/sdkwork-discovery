@@ -7,7 +7,7 @@ sdks/**/node_modules/
 /.env
 /.env.*
 !/.env.example
-!/.env.postgres.example
+!/config/host/postgres.env.example
 *.local.toml
 *.secret
 *.sqlite
@@ -23,7 +23,7 @@ sdks/**/node_modules/
 **/.runtime/
 !.env.example
 !.env.*.example
-!.env.postgres.example
+!config/host/postgres.env.example
 **/dist/
 coverage/
 **/.pnpm-store/

@@ -117,7 +117,7 @@ async function main() {
     resolveDevProfileId(settings.deploymentProfile) || DEFAULT_DEV_PROFILE_ID;
   const profileEnv = loadProfile(profileId);
   ensurePostgresDevEnvFile(REPO_ROOT, { stdout: console });
-  const postgresEnv = loadEnvFile('.env.postgres', REPO_ROOT);
+  const postgresEnv = loadEnvFile('config/host/postgres.env', REPO_ROOT);
   const processes = listOrchestrationProcesses(profileId);
   const serviceProcess = processes.find((process) => process.id === 'application.public-ingress');
   if (!serviceProcess?.crate) {

@@ -126,7 +126,7 @@ fn service_host_bootstrap_loads_resilience_config_from_env_overlay() {
 
 #[test]
 fn service_host_bootstrap_accepts_checked_in_postgres_env_example() {
-    let env = parse_env_example(include_str!("../../../.env.postgres.example"));
+    let env = parse_env_example(include_str!("../../../config/host/postgres.env.example"));
 
     let bootstrap = DiscoveryServiceHostBootstrap::from_toml_str_with_env(
         include_str!("../../../etc/discovery.example.toml"),
@@ -1070,7 +1070,7 @@ fn runtime_summary_contains_only_safe_operational_fields() {
 
 #[test]
 fn runtime_summary_includes_storage_safe_summary_without_secret_material() {
-    let env = parse_env_example(include_str!("../../../.env.postgres.example"));
+    let env = parse_env_example(include_str!("../../../config/host/postgres.env.example"));
     let runtime = DiscoveryServiceHostRuntime::from_toml_str_with_env(
         include_str!("../../../etc/discovery.example.toml"),
         &env,
