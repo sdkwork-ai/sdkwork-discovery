@@ -1,75 +1,28 @@
-name: Verify
+name: Verify Application
 
+# Thin verification entrypoint. Runner setup, dependency checkouts, toolchain
+# versions, and the install command come from the reusable SDKWork CI workflow
+# and `agent.workflow.json`; this file only selects the triggers and the gate
+# scripts. Never add inline setup, install, or gate commands here — declare them
+# in `agent.workflow.json` or the repository's package scripts instead.
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   verify:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Checkout sibling SDKWork dependencies
-        run: |
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-specs.git "${GITHUB_WORKSPACE}/../sdkwork-specs"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-app-topology.git "${GITHUB_WORKSPACE}/../sdkwork-app-topology"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-database.git "${GITHUB_WORKSPACE}/../sdkwork-database"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-web-framework.git "${GITHUB_WORKSPACE}/../sdkwork-web-framework"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-utils.git "${GITHUB_WORKSPACE}/../sdkwork-utils"
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.33.0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install
-
-      - name: Run repository verification
-        run: pnpm run verify
-
-  package-smoke:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Checkout sibling SDKWork dependencies
-        run: |
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-specs.git "${GITHUB_WORKSPACE}/../sdkwork-specs"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-app-topology.git "${GITHUB_WORKSPACE}/../sdkwork-app-topology"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-database.git "${GITHUB_WORKSPACE}/../sdkwork-database"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-web-framework.git "${GITHUB_WORKSPACE}/../sdkwork-web-framework"
-          git clone --depth 1 https://github.com/sdkwork-ai/sdkwork-utils.git "${GITHUB_WORKSPACE}/../sdkwork-utils"
-
-      - uses: dtolnay/rust-toolchain@stable
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.33.0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install
-
-      - name: Build and validate server release package
-        run: |
-          pnpm run release:package
-          pnpm run release:validate
+    uses: sdkwork-ai/sdkwork-github-workflow/.github/workflows/sdkwork-ci.yml@v1
+    with:
+      config_path: agent.workflow.json
+      scripts: verify
+      install_command: pnpm install --frozen-lockfile
+      os_matrix: '["ubuntu-24.04"]'
+      framework_ref: v1
+    secrets:
+      SDKWORK_RELEASE_TOKEN: ${{ secrets.SDKWORK_RELEASE_TOKEN }}

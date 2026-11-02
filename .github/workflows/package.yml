@@ -18,6 +18,37 @@ on:
         description: Package version used in artifact names and manifests.
         required: true
         default: 0.1.0
+      deployment_profile:
+        description: Deployment profile filter.
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - standalone
+          - cloud
+      runtime_target:
+        description: Runtime target filter.
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - browser
+          - desktop
+          - tablet-ipados
+          - tablet-android
+          - capacitor-ios
+          - capacitor-android
+          - flutter-ios
+          - flutter-android
+          - android-native
+          - ios-native
+          - harmony-native
+          - mini-program
+          - server
+          - container
+          - test-runner
       platform:
         description: Platform filter.
         required: true
@@ -28,7 +59,17 @@ on:
           - linux
           - windows
           - macos
+          - android
+          - android-tablet
+          - ios
+          - ipados
+          - windows-tablet
+          - web
+          - h5
+          - h5-weixin
+          - harmony
           - container
+          - mp-weixin
       architecture:
         description: Architecture filter.
         required: true
@@ -39,16 +80,26 @@ on:
           - x64
           - arm64
           - armv7
+          - universal
+          - wasm32
           - noarch
       profile:
-        description: Runtime profile filter.
+        description: Package profile filter.
         required: true
         default: all
         type: choice
         options:
           - all
+          - browser
           - server
+          - desktop
+          - mobile
+          - tablet
+          - mini-program
           - container
+          - worker
+          - library
+          - test
       variant:
         description: Package variant filter.
         required: true
@@ -62,6 +113,43 @@ on:
         required: true
         default: false
         type: boolean
+
+      sdkwork_database_ref:
+        description: 'SDKWORK_DATABASE_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_app_topology_ref:
+        description: 'SDKWORK_APP_TOPOLOGY_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_web_framework_ref:
+        description: 'SDKWORK_WEB_FRAMEWORK_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_utils_ref:
+        description: 'SDKWORK_UTILS_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_appbase_ref:
+        description: 'SDKWORK_APPBASE_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_core_ref:
+        description: 'SDKWORK_CORE_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_iam_ref:
+        description: 'SDKWORK_IAM_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_sdk_commons_ref:
+        description: 'SDKWORK_SDK_COMMONS_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
+      sdkwork_ui_ref:
+        description: 'SDKWORK_UI_REF dependency ref; blank falls back to the repository variable.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -77,6 +165,8 @@ jobs:
       config_path: agent.workflow.json
       tag: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref_name }}
       package_version: ${{ github.event.inputs.package_version || github.event.release.tag_name || github.ref_name }}
+      deployment_profile: ${{ github.event.inputs.deployment_profile || 'all' }}
+      runtime_target: ${{ github.event.inputs.runtime_target || 'all' }}
       platform: ${{ github.event.inputs.platform || 'all' }}
       architecture: ${{ github.event.inputs.architecture || 'all' }}
       profile: ${{ github.event.inputs.profile || 'all' }}
@@ -89,9 +179,14 @@ jobs:
       framework_ref: v1
       dependency_refs_json: >-
         {
-          "SDKWORK_DATABASE_REF": "${{ vars.SDKWORK_DATABASE_REF }}",
-          "SDKWORK_APP_TOPOLOGY_REF": "${{ vars.SDKWORK_APP_TOPOLOGY_REF }}",
-          "SDKWORK_WEB_FRAMEWORK_REF": "${{ vars.SDKWORK_WEB_FRAMEWORK_REF }}",
-          "SDKWORK_UTILS_REF": "${{ vars.SDKWORK_UTILS_REF }}"
+                    "SDKWORK_DATABASE_REF": "${{ github.event.inputs.sdkwork_database_ref || vars.SDKWORK_DATABASE_REF }}",
+                    "SDKWORK_APP_TOPOLOGY_REF": "${{ github.event.inputs.sdkwork_app_topology_ref || vars.SDKWORK_APP_TOPOLOGY_REF }}",
+                    "SDKWORK_WEB_FRAMEWORK_REF": "${{ github.event.inputs.sdkwork_web_framework_ref || vars.SDKWORK_WEB_FRAMEWORK_REF }}",
+                    "SDKWORK_UTILS_REF": "${{ github.event.inputs.sdkwork_utils_ref || vars.SDKWORK_UTILS_REF }}",
+                    "SDKWORK_APPBASE_REF": "${{ github.event.inputs.sdkwork_appbase_ref || vars.SDKWORK_APPBASE_REF }}",
+                    "SDKWORK_CORE_REF": "${{ github.event.inputs.sdkwork_core_ref || vars.SDKWORK_CORE_REF }}",
+                    "SDKWORK_IAM_REF": "${{ github.event.inputs.sdkwork_iam_ref || vars.SDKWORK_IAM_REF }}",
+                    "SDKWORK_SDK_COMMONS_REF": "${{ github.event.inputs.sdkwork_sdk_commons_ref || vars.SDKWORK_SDK_COMMONS_REF }}",
+                    "SDKWORK_UI_REF": "${{ github.event.inputs.sdkwork_ui_ref || vars.SDKWORK_UI_REF }}"
         }
     secrets: inherit
