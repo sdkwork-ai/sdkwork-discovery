@@ -6,6 +6,7 @@ Rust gRPC control plane for SDKWork service discovery and versioned runtime conf
 ## Scope
 
 - Service Registry: instance registration, lease renewal, deregistration, exact instance retrieval, discovery, and watch events.
+- HTTP Service Registry (`sdkwork-discovery-client`, `DISCOVERY_SPEC.md` §12.1): backend Rust SDKs register every instance/port and resolve peer HTTP base URLs directly from the registry database with heartbeat leases, QoS ordering, failure demotion, and last-known-good degradation.
 - Config Registry: drafts, immutable releases, rollback, effective configuration, and watch events.
 - Typed runtime configuration for server/container deployment.
 - SDKWork RPC contracts under `proto/` and RPC SDK manifest under `sdks/`.

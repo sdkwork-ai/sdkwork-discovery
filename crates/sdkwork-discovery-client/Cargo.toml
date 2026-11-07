@@ -1,0 +1,30 @@
+[package]
+rust-version.workspace = true
+name = "sdkwork-discovery-client"
+version.workspace = true
+edition.workspace = true
+description = "Direct-PostgreSQL HTTP service registry client for SDKWork backend SDKs"
+
+[lib]
+name = "sdkwork_discovery_client"
+
+[lints]
+workspace = true
+
+[dependencies]
+sdkwork-utils-rust.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# Align with the platform backend (gateway/webserver) SQLx major. The discovery
+# control plane itself still uses the workspace 0.8 line; this client is a
+# separate package and must not force a SQLx downgrade on its consumers.
+sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio", "postgres", "tls-rustls"] }
+reqwest.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["time"] }
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+pretty_assertions = "1"
+tokio = { workspace = true, features = ["macros", "rt", "net", "io-util"] }

@@ -4,6 +4,7 @@ members = [
     "crates/sdkwork-api-discovery-assembly",
     "crates/sdkwork-discovery-database-host",
     "crates/sdkwork-discovery-contract",
+    "crates/sdkwork-discovery-client",
     "crates/sdkwork-discovery-config",
     "crates/sdkwork-discovery-health-checker",
     "crates/sdkwork-discovery-storage-contract",
@@ -68,6 +69,7 @@ redis = { version = "0.27", features = ["tokio-comp"] }
 sdkwork-discovery-database-host = { path = "crates/sdkwork-discovery-database-host" }
 sdkwork-discovery-config = { path = "crates/sdkwork-discovery-config" }
 sdkwork-discovery-contract = { path = "crates/sdkwork-discovery-contract" }
+sdkwork-discovery-client = { path = "crates/sdkwork-discovery-client" }
 sdkwork-discovery-health-checker = { path = "crates/sdkwork-discovery-health-checker" }
 sdkwork-discovery-core = { path = "crates/sdkwork-discovery-core" }
 sdkwork-discovery-rpc = { path = "crates/sdkwork-discovery-rpc" }
