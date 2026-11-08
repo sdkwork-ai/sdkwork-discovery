@@ -1,11 +1,11 @@
 use std::collections::HashMap;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, RwLock};
+use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex, RwLock};
 
 use sdkwork_utils_rust::service_base_url::{HttpServiceRegistry, RegistryHttpTarget};
 
 use crate::registry::{now_ms, HttpRegistry, RegistryError};
-use crate::selection::{select_target, TargetState};
+use crate::selection::{select_target_with, LoadBalanceStrategy, TargetState};
 
 /// Default snapshot refresh interval.
 pub const DEFAULT_REFRESH_INTERVAL_MS: u64 = 5_000;
@@ -23,6 +23,8 @@ pub struct HttpRegistryConfig {
     pub failure_threshold: u32,
     /// How long a demoted target is skipped.
     pub failure_cooldown_ms: u64,
+    /// Load-balancing strategy across admissible targets.
+    pub load_balancer: LoadBalanceStrategy,
     /// Optional active health-probe path (for example `/healthz`).
     ///
     /// `None` keeps availability detection purely failure-driven. When set, each
@@ -39,6 +41,7 @@ impl Default for HttpRegistryConfig {
             refresh_interval_ms: DEFAULT_REFRESH_INTERVAL_MS,
             failure_threshold: DEFAULT_FAILURE_THRESHOLD,
             failure_cooldown_ms: DEFAULT_FAILURE_COOLDOWN_MS,
+            load_balancer: LoadBalanceStrategy::default(),
             health_probe_path: None,
             health_probe_timeout_ms: 2_000,
         }
@@ -58,6 +61,8 @@ pub struct HttpRegistryResolver {
     probe_client: Option<reqwest::Client>,
     snapshot: RwLock<HashMap<String, Vec<TargetState>>>,
     last_refresh_ms: AtomicU64,
+    load_cursor: AtomicUsize,
+    load_seed: Mutex<u64>,
 }
 
 /// Probes one endpoint and returns whether it answered 2xx.
@@ -94,6 +99,8 @@ impl HttpRegistryResolver {
             probe_client,
             snapshot: RwLock::new(HashMap::new()),
             last_refresh_ms: AtomicU64::new(0),
+            load_cursor: AtomicUsize::new(0),
+            load_seed: Mutex::new((now_ms().max(1) as u64) ^ 0x9E37_79B9_7F4A_7C15),
         })
     }
 
@@ -239,7 +246,23 @@ impl HttpServiceRegistry for HttpRegistryResolver {
     fn resolve_http(&self, service: &str) -> Option<RegistryHttpTarget> {
         let cache = self.read_snapshot();
         let states = cache.get(service)?;
-        select_target(states, now_ms().max(0) as u64).map(|target| RegistryHttpTarget {
+        let mut cursor = self.load_cursor.fetch_add(1, Ordering::Relaxed);
+        let mut seed = *self
+            .load_seed
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let selected = select_target_with(
+            states,
+            now_ms().max(0) as u64,
+            self.config.load_balancer,
+            &mut cursor,
+            &mut seed,
+        );
+        *self
+            .load_seed
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) = seed;
+        selected.map(|target| RegistryHttpTarget {
             service: service.to_owned(),
             instance_id: target.instance_id,
             base_url: target.endpoint,

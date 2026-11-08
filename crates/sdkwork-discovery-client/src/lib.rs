@@ -21,11 +21,16 @@
 //!   degrades to the authored topology value when none is available
 //!   (`QoS` + graceful degradation).
 
+mod advertise;
 mod registry;
 mod resolver;
 mod schema;
 mod selection;
 
+pub use advertise::{
+    advertised_http_endpoint, detect_lan_ip, select_endpoint, ENV_ADVERTISE_IP,
+    ENV_GATEWAY_ADVERTISE_IP, ENV_GATEWAY_PRIVATE_HTTP_URL, ENV_PRIVATE_HTTP_URL,
+};
 pub use registry::{
     HttpInstanceRegistration, HttpRegistry, HttpTarget, RegisterHttpInstance,
     RegisteredHttpInstance, RegistryError, RegistryIdentity, RegistryStatus,
@@ -35,7 +40,7 @@ pub use resolver::{
     DEFAULT_FAILURE_THRESHOLD, DEFAULT_REFRESH_INTERVAL_MS,
 };
 pub use schema::REGISTRY_TABLE_DDL;
-pub use selection::{select_target, TargetState};
+pub use selection::{select_target, select_target_with, LoadBalanceStrategy, TargetState};
 
 use std::sync::Arc;
 
@@ -55,16 +60,33 @@ pub const ENV_ENVIRONMENT: &str = "SDKWORK_ENVIRONMENT";
 /// Namespace defaults to `platform`; environment defaults to the canonical
 /// `SDKWORK_ENVIRONMENT` value and finally `development`.
 pub fn registry_identity_from_env() -> RegistryIdentity {
+    registry_identity_from_env_or("development")
+}
+
+/// Builds the registry identity with a caller-supplied environment fallback.
+///
+/// A gateway passes its resolved runtime environment so registration and
+/// consumption agree even when `SDKWORK_ENVIRONMENT` is absent; consumers keep
+/// the deprecated gateway aliases working during migration.
+pub fn registry_identity_from_env_or(default_environment: &str) -> RegistryIdentity {
     let namespace = std::env::var(ENV_DISCOVERY_NAMESPACE)
         .ok()
         .map(|value| value.trim().to_owned())
         .filter(|value| !value.is_empty())
         .unwrap_or_else(|| "platform".to_owned());
-    let environment = std::env::var(ENV_ENVIRONMENT)
-        .ok()
-        .map(|value| value.trim().to_owned())
-        .filter(|value| !value.is_empty())
-        .unwrap_or_else(|| "development".to_owned());
+    let environment = [
+        ENV_ENVIRONMENT,
+        "SDKWORK_API_CLOUD_GATEWAY_ENVIRONMENT",
+        "GATEWAY_ENVIRONMENT",
+    ]
+    .into_iter()
+    .find_map(|key| {
+        std::env::var(key)
+            .ok()
+            .map(|value| value.trim().to_owned())
+            .filter(|value| !value.is_empty())
+    })
+    .unwrap_or_else(|| default_environment.trim().to_owned());
     RegistryIdentity::new(namespace, environment)
 }
 
@@ -98,6 +120,16 @@ pub async fn install_resolver_from_env(
     if let Ok(value) = std::env::var("SDKWORK_DISCOVERY_HTTP_REGISTRY_HEALTH_TIMEOUT_MS") {
         if let Ok(timeout_ms) = value.trim().parse::<u64>() {
             config.health_probe_timeout_ms = timeout_ms.max(250);
+        }
+    }
+    if let Ok(value) = std::env::var("SDKWORK_DISCOVERY_HTTP_REGISTRY_LOAD_BALANCER") {
+        match LoadBalanceStrategy::parse(&value) {
+            Some(strategy) => config.load_balancer = strategy,
+            None => tracing::warn!(
+                value = %value,
+                supported = ?LoadBalanceStrategy::SUPPORTED,
+                "unknown service registry load balancer; using priority"
+            ),
         }
     }
     let registry = HttpRegistry::connect(&database_url, identity, 2)

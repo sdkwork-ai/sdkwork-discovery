@@ -20,6 +20,7 @@ serde_json.workspace = true
 # separate package and must not force a SQLx downgrade on its consumers.
 sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio", "postgres", "tls-rustls"] }
 reqwest.workspace = true
+if-addrs = "0.15"
 thiserror.workspace = true
 tokio = { workspace = true, features = ["time"] }
 tracing.workspace = true
